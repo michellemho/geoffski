@@ -21,7 +21,7 @@
         p {
             text-align: center;
             margin: auto;
-            width: 50%;
+            width: 80%;
             color:indianred;
             font-family: monospace;
         }
@@ -41,7 +41,7 @@
     </style>
     <h1>Merry Christmas, Geoff</h1>
     <p>Wishing you endless skiing and endless love</p>
-    <p style='color:palevioletred'>Use the arrow keys!</p>
+    <p style='color:palevioletred'>Use the arrow keys or click on left/right of screen!</p>
 
     <div id='gamecontainer'></div>
     <h1>Love, Michelle</h1>
@@ -199,8 +199,23 @@ function create ()
             heart = createHeart();
             }
         })
-
-        if (cursors.right.isDown)
+        if (this.input.activePointer.isDown && this.input.activePointer.x > 400) {
+            console.log('going right!')
+            trees.setVelocityX(-160);
+            trees.setVelocityY(-500);
+            hearts.setVelocityX(-160);
+            hearts.setVelocityY(-500);
+            player.anims.play('right', true);
+        }
+        else if (this.input.activePointer.isDown && this.input.activePointer.x <= 400) {
+            console.log('going left!')
+            trees.setVelocityX(160);
+            trees.setVelocityY(-500);
+            hearts.setVelocityX(160);
+            hearts.setVelocityY(-500);
+            player.anims.play('left', true);
+        }
+        else if (cursors.right.isDown)
         {
             trees.setVelocityX(-160);
             trees.setVelocityY(-500);
