@@ -10,6 +10,7 @@
         body {
             margin: auto;
             background-color:black;
+            height:100%
         }
         h1 {
             text-align: center;
@@ -35,7 +36,7 @@
         #gamecontainer{
             margin: auto;
             width: 800px;
-            height: 600px;
+            height: 100%;
             border: 3px solid green;
         }
     </style>
@@ -64,10 +65,10 @@
     )
 
     var config = {
-        type: Phaser.AUTO,
+        type: Phaser.CANVAS,
         parent: 'gamecontainer',
         width: 800,
-        height: 900,
+        height: window.innerHeight * window.devicePixelRatio,
         backgroundColor: '#FFFFFF',
         physics: {
             default: 'arcade',
