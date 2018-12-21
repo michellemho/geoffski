@@ -257,7 +257,9 @@ function create ()
             restartButton.setText('Restart?')
                 .setInteractive()
                 .on('pointerdown', actionOnClick)
-            restartButton.setDepth(3)
+            restartButton.setDepth(3);
+            player.anims.play('crash')
+
             
         }
     }
@@ -265,10 +267,11 @@ function create ()
 
 function hitTree (player, tree){
     console.log('hit!')
+    player.anims.play('crash')
+
     this.physics.pause();
 
     player.setTint(0xff0000);
-    player.anims.play('crash')
     trees.setVelocityX(0);
     trees.setVelocityY(0);
     gameOver = true;
