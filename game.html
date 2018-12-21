@@ -36,17 +36,17 @@
         #gamecontainer{
             margin: auto;
             width: 800px;
-            height: 100%;
             border: 3px solid green;
         }
     </style>
     <h1>Merry Christmas, Geoff</h1>
     <p>Wishing you endless skiing and endless love</p>
+    
     <p style='color:palevioletred'>Use the arrow keys or click on left/right of screen!</p>
+    <div id='highscore-container'>High Scores! </div>
+    <h1>Love, Michelle</h1>
 
     <div id='gamecontainer'></div>
-    <h1>Love, Michelle</h1>
-    <div id='highscore-container'>High Scores! </div>
 
 </head>
 <body>
@@ -68,7 +68,7 @@
         type: Phaser.CANVAS,
         parent: 'gamecontainer',
         width: 800,
-        height: window.innerHeight,
+        height: window.innerHeight - 150,
         backgroundColor: '#FFFFFF',
         physics: {
             default: 'arcade',
