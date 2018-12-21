@@ -7,6 +7,7 @@
     <style type="text/css">
         body {
             margin: 0;
+            background-color:black;
         }
     </style>
 </head>
@@ -38,16 +39,15 @@
     var gameOver = false;
     var score = 0;
     var scoreText;
+    var button;
+
     var start = Date.now();
 
 function preload ()
     {
-        // this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
-        // this.load.image('star', 'assets/star.png');
-        // this.load.image('bomb', 'assets/bomb.png');
+        this.load.spritesheet('geoff', 'assets/Geoff_SKI_ALL_V2.png', { frameWidth: 40, frameHeight: 48 });
+        this.load.image('heart', 'assets/heart.png');
         this.load.image('tree', 'assets/pinetree.png');
-        this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
     
 function createTree (y) {
@@ -55,92 +55,83 @@ function createTree (y) {
         y = this.game.config.height
     }
             x = Phaser.Math.Between(0, 800)
-            return this.trees.create(x, y, 'tree').setVelocityY(-200)
+            this.trees.create(x, y, 'tree')
+            
     
     }
 
 function create ()
-    {
-
-        trees = this.physics.add.group();
-
-        // this.add.image(400, 300, 'sky');
-        // trees.create(400, 400, 'tree');
-
-        // trees.create(600, 400, 'tree');
-        // trees.create(50, 250, 'tree');
-        // trees.create(750, 220, 'tree');
-
-        for (i = 0; i < 600; i += 100){
-            createTree(i)
-        }
-        // createTree(600);
-        // createTree(400);
-        // createTree(420);
-        // createTree(300);
-        // createTree(450);
-        // tree = createTree(500);
-        // // console.log(tree)
-        // trees.setVelocityY(-200);
-
-        player = this.physics.add.sprite(400, 200, 'dude');
+    {   
+        player = this.physics.add.sprite(400, 200, 'geoff');
 
         player.setGravityY(0);
-        
-        // player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
+        trees = this.physics.add.group();
+        hearts = this.physics.add.group();
+
+        for (i = 0; i < 600; i += 80){
+            createTree(i)
+        }
+
+        for (i = 0; i < 600; i += 600){
+            createHeart(i)
+        }
+
         this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            key: 'walk_left',
+            frames: this.anims.generateFrameNumbers('geoff', { start: 1, end: 2 }),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 4 }],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'down',
-            frames: [ { key: 'dude', frame: 4 }],
+            key: 'left',
+            frames: [ { key: 'geoff', frame: 5 }],
             frameRate: 20
         });
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: [ { key: 'geoff', frame: 6 }],
+            frameRate: 20,
+        });
+
+        this.anims.create({
+            key: 'straight',
+            frames: [ { key: 'geoff', frame: 4 }],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'jump',
+            frames: [ { key: 'geoff', frame: 3 }],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'crash',
+            frames: [ { key: 'geoff', frame: 7 }],
+            frameRate: 20
+        });
+
+
+        this.anims.create({
+            key: 'walk_right',
+            frames: this.anims.generateFrameNumbers('geoff', { start: 8, end: 9 }),
             frameRate: 10,
             repeat: -1
-        })
-
-        // stars = this.physics.add.group({
-        //     key: 'star',
-        //     repeat: 11,
-        //     setXY: { x: 12, y: 0, stepX: 70}
-        // });
-
-        // this.physics.add.collider(stars, trees);
+        });
 
 
-        // stars.children.iterate(function (child) {
-        //     child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4))
-        // })
-
-
-        this.physics.add.overlap(player, trees, hitTree, null, this);
-        // this.physics.add.overlap(player, stars, collectStar, null, this);
+        this.physics.add.collider(player, trees, hitTree, null, this);
    
-        cursors = this.input.keyboard.createCursorKeys();
-        gameOverText = this.add.text(400, 300)
-        scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-        
-        bombs = this.physics.add.group();
+        this.physics.add.overlap(player, hearts, collectHeart, null, this);
 
-        this.physics.add.collider(bombs, trees);
-        this.physics.add.collider(player, bombs, hitBomb, null, this);
+        cursors = this.input.keyboard.createCursorKeys();
+        gameOverText = this.add.text(400, 300,'', { fontSize: '32px', fill: '#FF0000'})
+        scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000000' });
+        restartButton = this.add.text(100, 100, '', { fill: '#0f0' })
     }
 
     function update ()
@@ -148,90 +139,95 @@ function create ()
         trees.children.entries.forEach(tree => {
             if (tree.y <= 0) {
             tree.destroy();
-            // console.log(tree)
             tree = createTree();
             }
         })
-        
-        if (Date.now() - start > 10000){
-            createTree();
-            start = Date.now()
-        }
+
+        hearts.children.entries.forEach(heart => {
+            if (heart.y <= 0) {
+            heart.destroy();
+            heart = createHeart();
+            }
+        })
 
         if (cursors.right.isDown)
         {
             trees.setVelocityX(-160);
-            trees.setVelocityY(-200);
+            trees.setVelocityY(-500);
+            hearts.setVelocityX(-160);
+            hearts.setVelocityY(-500);
             player.anims.play('right', true);
         }
         else if (cursors.left.isDown)
         {
             trees.setVelocityX(160);
-            trees.setVelocityY(-200);
+            trees.setVelocityY(-500);
+            hearts.setVelocityX(160);
+            hearts.setVelocityY(-500);
             player.anims.play('left', true);
+        }
+        else if (cursors.down.isDown)
+        {
+            trees.setVelocityX(0);
+            trees.setVelocityY(-600);
+            hearts.setVelocityX(0);
+            hearts.setVelocityY(-600);
+            player.anims.play('straight', true);
         }
         else
         {
-            // trees.setVelocityX(0);
-            // trees.setVelocityY(0);
+            trees.setVelocityX(0);
+            trees.setVelocityY(-600);
+            hearts.setVelocityX(0);
+            hearts.setVelocityY(-600);
 
-            player.anims.play('turn');
+            player.anims.play('straight');
         }
 
-        // if (cursors.down.isDown)
-        // {
-        //     trees.setVelocityY(-160);
-        //     player.anims.play('down', true);
-
-        // }
-        // if (cursors.up.isDown)
-        // {
-        //     trees.setVelocityY(160);
-
-        //     player.anims.play('down', true);
-        // }
         if (gameOver){
-            gameOverText.setText('Game Over!')
+            // console.log("Game Over!")
+            gameOverText.setText('Game Over! Womp womp.')
+            restartButton.setText('Restart?')
+                .setInteractive()
+                .on('pointerdown', actionOnClick)
         }
     }
+
 
 function hitTree (player, tree){
-    // console.log('hit!')
-    // this.physics.pause();
-    trees.setVelocityX(0);
-    trees.setVelocityY(0);
-}
-
-function collectStar (player, star)
-{
-    star.disableBody(true, true);
-    score += 10;
-    scoreText.setText('Score: ' + score)
-    
-    if (stars.countActive(true) === 0){
-        stars.children.iterate(function (child){
-            child.enableBody(true, child.x, 0, true, true);
-        });
-        
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-        var bomb = bombs.create(x, 16, 'bomb')
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
-        bomb.allowGravity = false;
-    }
-}    
-function hitBomb (player, bomb)
-{
+    console.log('hit!')
     this.physics.pause();
 
     player.setTint(0xff0000);
-
-    player.anims.play('turn');
-
+    player.anims.play('crash')
+    trees.setVelocityX(0);
+    trees.setVelocityY(0);
     gameOver = true;
 }
+
+function actionOnClick () {
+
+    console.log('restarting...')
+    location.reload()
+}
+
+function collectHeart (player, heart)
+{
+    heart.disableBody(true, true);
+    score += 10;
+    scoreText.setText('Score: ' + score)
+    heart = createHeart();
+}
+
+function createHeart (y) {
+    if (!y){
+        y = this.game.config.height
+    }
+            x = Phaser.Math.Between(0, 800)
+            this.hearts.create(x, y, 'heart')
+    
+    }
+
 </script>
 
 </body>
