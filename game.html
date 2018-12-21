@@ -6,17 +6,44 @@
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
         body {
-            margin: 0;
+            margin: auto;
             background-color:black;
         }
+        h1 {
+            text-align: center;
+            margin: auto;
+            width: 50%;
+            color:blanchedalmond;
+            font-family: monospace;
+        }
+        p {
+            text-align: center;
+            margin: auto;
+            width: 50%;
+            color:indianred;
+            font-family: monospace;
+        }
+        #gamecontainer{
+            margin: auto;
+            width: 800px;
+            height: 600px;
+            border: 3px solid green;
+        }
     </style>
+    <h1>Merry Christmas, Geoff</h1>
+    <p>Wishing you endless skiing and endless love</p>
+
+    <div id='gamecontainer'></div>
+    <h1>Love, Michelle</h1>>
+
 </head>
 <body>
 
 <script type="text/javascript">
-
+    // $('p').html('<3 Michelle');
     var config = {
         type: Phaser.AUTO,
+        parent: 'gamecontainer',
         width: 800,
         height: 600,
         backgroundColor: '#FFFFFF',
@@ -129,9 +156,9 @@ function create ()
         this.physics.add.overlap(player, hearts, collectHeart, null, this);
 
         cursors = this.input.keyboard.createCursorKeys();
-        gameOverText = this.add.text(400, 300,'', { fontSize: '32px', fill: '#FF0000'})
+        gameOverText = this.add.text(240, 250,'', { fontSize: '32px', fill: '#FF0000'})
         scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000000' });
-        restartButton = this.add.text(100, 100, '', { fill: '#0f0' })
+        restartButton = this.add.text(400, 300, '', { fill: '#0f0' })
     }
 
     function update ()
@@ -187,9 +214,11 @@ function create ()
         if (gameOver){
             // console.log("Game Over!")
             gameOverText.setText('Game Over! Womp womp.')
+            gameOverText.setDepth(3)
             restartButton.setText('Restart?')
                 .setInteractive()
                 .on('pointerdown', actionOnClick)
+            restartButton.setDepth(3)
         }
     }
 
