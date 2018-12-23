@@ -119,6 +119,7 @@ function create ()
         hearts = this.physics.add.group();
 
         startingx = [50,100,150,200,250,300,350,360,460,500,550,600,650,700,750]
+        startingxHearts = [80,130,180,230,270,330,365,430,460,520,570,620,670,730]
 
         for (i = 0; i < game.config.height; i += 100){
             createTree(i, startingx[Math.floor(Math.random()*startingx.length)])
@@ -196,7 +197,7 @@ function create ()
         hearts.children.entries.forEach(heart => {
             if (heart.y <= 0) {
             heart.destroy();
-            heart = createHeart();
+            heart = createHeart(null, startingxHearts[Math.floor(Math.random()*startingxHearts.length)]);
             }
         })
         if (this.input.activePointer.isDown && this.input.activePointer.x > 400) {
@@ -295,7 +296,7 @@ function collectHeart (player, heart)
     heart = createHeart();
 }
 
-function createHeart (y) {
+function createHeart (y, x) {
     if (!y){
         y = this.game.config.height
     }
