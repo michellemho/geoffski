@@ -41,13 +41,10 @@
     </style>
     <h1>Merry Christmas, Geoff</h1>
     <p>Wishing you endless skiing and endless love</p>
-    
     <p style='color:palevioletred'>Use the arrow keys or click on left/right of screen!</p>
+    <div id='gamecontainer'></div>
     <div id='highscore-container'>High Scores! </div>
     <h1>Love, Michelle</h1>
-
-    <div id='gamecontainer'></div>
-
 </head>
 <body>
 
@@ -113,12 +110,14 @@ function createTree (y, x) {
 function create ()
     {   
         player = this.physics.add.sprite(400, 200, 'geoff');
-
+        // player.displayHeight=game.config.height*.2;
+        // player.scaleX=player.scaleY
         player.setGravityY(0);
         player.setCollideWorldBounds(true);
 
         trees = this.physics.add.group();
         hearts = this.physics.add.group();
+
         startingx = [50,100,150,200,250,300,350,360,460,500,550,600,650,700,750]
 
         for (i = 0; i < game.config.height; i += 80){
@@ -202,33 +201,33 @@ function create ()
         })
         if (this.input.activePointer.isDown && this.input.activePointer.x > 400) {
             console.log('going right!')
-            trees.setVelocityX(-160);
+            trees.setVelocityX(-240);
             trees.setVelocityY(-500);
-            hearts.setVelocityX(-160);
+            hearts.setVelocityX(-240);
             hearts.setVelocityY(-500);
             player.anims.play('right', true);
         }
         else if (this.input.activePointer.isDown && this.input.activePointer.x <= 400) {
             console.log('going left!')
-            trees.setVelocityX(160);
+            trees.setVelocityX(240);
             trees.setVelocityY(-500);
-            hearts.setVelocityX(160);
+            hearts.setVelocityX(240);
             hearts.setVelocityY(-500);
             player.anims.play('left', true);
         }
         else if (cursors.right.isDown)
         {
-            trees.setVelocityX(-160);
+            trees.setVelocityX(-240);
             trees.setVelocityY(-500);
-            hearts.setVelocityX(-160);
+            hearts.setVelocityX(-240);
             hearts.setVelocityY(-500);
             player.anims.play('right', true);
         }
         else if (cursors.left.isDown)
         {
-            trees.setVelocityX(160);
+            trees.setVelocityX(240);
             trees.setVelocityY(-500);
-            hearts.setVelocityX(160);
+            hearts.setVelocityX(240);
             hearts.setVelocityY(-500);
             player.anims.play('left', true);
         }
