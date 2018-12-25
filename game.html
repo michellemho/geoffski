@@ -119,14 +119,14 @@ function create ()
         hearts = this.physics.add.group();
 
         startingx = [50,100,150,200,250,300,350,360,460,500,550,600,650,700,750]
-        startingxHearts = [80,130,180,230,270,330,365,430,460,520,570,620,670,730]
+        startingxHearts = [80,130,180,230,270,330,355,440,460,520,570,620,670,730]
 
         for (i = 0; i < game.config.height; i += 100){
             createTree(i, startingx[Math.floor(Math.random()*startingx.length)])
         }
 
         for (i = 0; i < game.config.height; i += game.config.height){
-            createHeart(i)
+            createHeart(i, startingxHearts[Math.floor(Math.random()*startingxHearts.length)])
         }
 
         this.anims.create({
@@ -293,16 +293,18 @@ function collectHeart (player, heart)
     heart.disableBody(true, true);
     score += 10;
     scoreText.setText('Score: ' + score)
-    heart = createHeart();
+    heart = createHeart(null, startingxHearts[Math.floor(Math.random()*startingxHearts.length)]);
 }
 
 function createHeart (y, x) {
     if (!y){
         y = this.game.config.height
     }
-            x = Phaser.Math.Between(0, 800)
-            this.hearts.create(x, y, 'heart')
-    
+    if (!x){
+        x = Phaser.Math.Between(0, 800)
+    }
+    this.hearts.create(x, y, 'heart')
+    console.log("heart at ", x, y)
     }
 
 </script>
